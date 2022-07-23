@@ -1,35 +1,39 @@
-import { signOut } from "firebase/auth";
-import reactLogo from "../assets/react.svg";
-import { auth } from "../firebase/auth";
 import { invoke } from "@tauri-apps/api";
+import { useState } from "react";
+import Sidebar from "./Sidebar";
+import FriendsTab from "./tabs/Friends";
+import RoomsTab from "./tabs/Rooms";
+
+export type Tabs = "rooms" | "friends";
 
 function AppBody() {
-	async function logout() {
-		try {
-			await signOut(auth);
-		} catch (error) {
-			alert("An error ocurred while logging out, try again");
-		}
-	}
+	const [tab, setTab] = useState<Tabs>("rooms");
+
+	const handleTabs = (tab: Tabs) => {
+		setTab(tab);
+		console.log("setting tab ->", tab);
+	};
 
 	return (
-		<div>
-			<button className="btn btn-warning" onClick={logout}>
-				Logout
-			</button>
-			<button
-				className="btn btn-primary"
-				onClick={async () => {
-					alert(
-						await invoke("greet", {
-							name: "Luís",
-						})
-					);
-				}}>
-				Test API
-			</button>
-			<img src={reactLogo} alt="img" />
-		</div>
+		<main className="flex">
+			<section className="w-64 h-screen">
+				<Sidebar handler={handleTabs} />
+			</section>
+			<section className="flex-grow p-4">
+				{tab === "rooms" ? <RoomsTab /> : <FriendsTab />}
+				{/* <button
+					className="btn btn-primary"
+					onClick={async () => {
+						alert(
+							await invoke("greet", {
+								name: "Luís",
+							})
+						);
+					}}>
+					Test API
+				</button> */}
+			</section>
+		</main>
 	);
 }
 

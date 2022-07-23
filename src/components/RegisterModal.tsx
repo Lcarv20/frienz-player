@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { auth } from "../firebase/auth";
 
 function RegisterModal() {
@@ -8,42 +8,44 @@ function RegisterModal() {
 	const [password, setPassword] = useState("");
 	const [confirm, setConfirm] = useState("");
 
+	const closeBtnRef = useRef<HTMLLabelElement | null>(null);
+
 	async function register(ev: FormEvent) {
 		ev.preventDefault();
-		console.dir({
-			email,
-			password,
-			confirm,
-		});
 
-		//TODO: Confirm if passwords are equal
+		isLoading(true);
+
+		if (password !== confirm) {
+			// TODO: Handle error properly with an alert and input color changes
+			alert("Sorry, passwords must match!");
+			isLoading(false);
+			return;
+		}
 
 		try {
 			await createUserWithEmailAndPassword(auth, email, password);
+			// Reset fields
+			setConfirm("");
+			setEmail("");
+			setPassword("");
 		} catch (error) {
 			// TODO: handle error properly
 			console.error(error);
 			alert("Sorry there was an error, please try again later");
 		}
-
-		isLoading(true);
-
-		setTimeout(() => {
-			isLoading(false);
-			document.getElementById("register-modal")?.click();
-		}, 5000);
 	}
 	return (
-		<div>
+		<>
 			<input type="checkbox" id="register-modal" className="modal-toggle" />
 			<div className="modal">
 				<div className="modal-box relative bg-primary-content">
 					<label
 						htmlFor="register-modal"
+						ref={closeBtnRef}
 						className="btn btn-ghost btn-sm btn-circle absolute right-2 top-2">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							className="h-5 w-5 fill-warning"
+							className="h-5 w-5 fill-error"
 							viewBox="0 0 20 20"
 							fill="currentColor">
 							<path
@@ -106,7 +108,7 @@ function RegisterModal() {
 					</form>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 

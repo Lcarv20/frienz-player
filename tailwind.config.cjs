@@ -40,23 +40,23 @@ module.exports = {
 
 			{
 				frienz: {
-					primary: "#0891b2",
+					primary: "#8c96e2",
 
-					secondary: "#6366f1",
+					secondary: "#7801aa",
 
-					accent: "#1e40af",
+					accent: "#d84eb8",
 
-					neutral: "#382339",
+					neutral: "#292E32",
 
-					"base-100": "#2F3541",
+					"base-100": "#EDEDEE",
 
-					info: "#67e8f9",
+					info: "#3365D1",
 
-					success: "#4ade80",
+					success: "#1BB17A",
 
-					warning: "#D5A30B",
+					warning: "#A9790A",
 
-					error: "#EE687C",
+					error: "#E94D3F",
 				},
 			},
 		],
