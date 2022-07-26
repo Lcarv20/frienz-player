@@ -1,8 +1,7 @@
-import { invoke } from "@tauri-apps/api";
 import { useState } from "react";
 import Sidebar from "./Sidebar";
 import FriendsTab from "./tabs/Friends";
-import RoomsTab from "./tabs/Rooms";
+import RoomsTab from "./tabs/Loby";
 
 export type Tabs = "rooms" | "friends";
 
@@ -16,10 +15,10 @@ function AppBody() {
 
 	return (
 		<main className="flex">
-			<section className="w-64 h-screen">
-				<Sidebar handler={handleTabs} />
+			<section className="w-64 flex-shrink-0 h-screen">
+				<Sidebar activeTab={tab} handler={handleTabs} />
 			</section>
-			<section className="flex-grow p-4">
+			<section className="flex-grow flex-shrink p-4">
 				{tab === "rooms" ? <RoomsTab /> : <FriendsTab />}
 				{/* <button
 					className="btn btn-primary"

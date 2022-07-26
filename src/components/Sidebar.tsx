@@ -2,7 +2,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebase/auth";
 import { Tabs } from "./AppBody";
 
-function Sidebar(props: { handler: (tab: Tabs) => void }) {
+function Sidebar(props: { activeTab: string; handler: (tab: Tabs) => void }) {
 	async function logout() {
 		try {
 			await signOut(auth);
@@ -15,7 +15,9 @@ function Sidebar(props: { handler: (tab: Tabs) => void }) {
 			<div className="basis-1/5 flex justify-center items-center">
 				<div className="avatar placeholder">
 					<div className="bg-black glass text-neutral-content rounded-full w-16 ring-1 ring-primary ring-offset-base-100 ring-offset-2">
-						<span className="text-xl">JO</span>
+						<span className="text-xl uppercase">
+							{auth.currentUser?.email?.substring(0, 2)}
+						</span>
 					</div>
 				</div>
 			</div>
