@@ -1,7 +1,16 @@
-import { FormEvent, useEffect, useState } from "react";
+import {
+	ChangeEventHandler,
+	FormEvent,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 
 function Room(props: { handleClose: () => void; roomData: any }) {
 	const [hidden, setHidden] = useState(true);
+	const [file, setFile] = useState<File | null>(null);
+	const [fUrl, setFUrl] = useState<string | null>(null);
+	const fileRef = useRef<any>(null);
 
 	useEffect(() => {
 		setHidden(false);
@@ -14,6 +23,12 @@ function Room(props: { handleClose: () => void; roomData: any }) {
 
 	function handleMessage(ev: FormEvent) {
 		ev.preventDefault();
+	}
+
+	function handleFileUpload(ev: FormEvent) {
+		ev.preventDefault();
+
+		alert(file);
 	}
 
 	return (
@@ -36,23 +51,38 @@ function Room(props: { handleClose: () => void; roomData: any }) {
 						/>
 					</svg>
 				</button>
-				<div className="h-full p-4 grid grid-cols-4">
-					<div className="h-24 w-24 rounded bg-neutral p-2 cursor-pointer">
-						<div className="h-full rounded border-2 border-dashed border-base-content/50 flex items-center justify-center">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								className="h-5 w-5 fill-base-content/50"
-								viewBox="0 0 20 20"
-								fill="currentColor">
-								<path
-									fillRule="evenodd"
-									d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-									clipRule="evenodd"
-								/>
-							</svg>
+
+				<form onSubmit={handleFileUpload} className="self-center my-auto">
+					{/* <label
+						className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+						htmlFor="file_input">
+						Select File
+					</label> */}
+					<input
+						className="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+						id="file_input"
+						type="file"
+						onChange={(ev) => {
+							if (ev.target.files) {
+								const blob = window.URL || window.webkitURL;
+								const file = ev.target.files[0];
+								const fileUrl = blob.createObjectURL(file);
+								setFile(file);
+								setFUrl(fileUrl);
+							} else {
+								alert("Sorry something went wrong!");
+							}
+						}}
+					/>
+
+					<input type="submit" value="Upload" className="btn btn-primary" />
+
+					{fUrl && (
+						<div>
+							<video src={fUrl} controls></video>
 						</div>
-					</div>
-				</div>
+					)}
+				</form>
 			</div>
 
 			{/* Room Sidebar */}
